@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monirul Islam — Power Platform & Data Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #070a12;
+      --bg2:       #0d1120;
+      --bg3:       #111828;
+      --cyan:      #00d4ff;
+      --blue:      #1a56db;
+      --indigo:    #2a1f6e;
+      --text:      #e8eaf2;
+      --muted:     #7a8299;
+      --border:    rgba(255,255,255,0.07);
+      --card:      rgba(255,255,255,0.03);
+      --glow:      0 0 40px rgba(0,212,255,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(7,10,18,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo img { height: 36px; display: block; }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 0.5rem 1.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.03em;
+    }
+    .nav-cta:hover { background: var(--cyan); color: var(--bg); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -10%;
+      left: 30%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(26,86,219,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      top: 20%;
+      left: 55%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      color: var(--cyan);
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+    }
+
+    h1 .line2 { color: var(--cyan); }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: var(--bg);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 4rem; position: relative; }
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+    .section-divider {
+      width: 40px; height: 2px;
+      background: var(--cyan);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1100px;
+    }
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: rgba(0,212,255,0.3); }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--cyan);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--muted); }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+    }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.8rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .skill-group:hover {
+      border-color: rgba(0,212,255,0.25);
+      box-shadow: var(--glow);
+    }
+    .skill-group-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+    }
+    .skill-group h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: rgba(0,212,255,0.07);
+      border: 1px solid rgba(0,212,255,0.15);
+      color: var(--cyan);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .tag.blue {
+      background: rgba(26,86,219,0.1);
+      border-color: rgba(26,86,219,0.25);
+      color: #6ba3ff;
+    }
+    .tag.neutral {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border);
+      color: var(--muted);
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg2); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+    }
+    .project-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      transition: border-color 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      border-color: rgba(0,212,255,0.25);
+      transform: translateY(-3px);
+    }
+    .project-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .badge-live { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .badge-wip  { background: rgba(255,180,0,0.1); color: #ffd066; border: 1px solid rgba(255,180,0,0.2); }
+
+    .project-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .project-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.4rem; flex: 1; }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.4rem; }
+    .project-links { display: flex; gap: 1rem; }
+    .project-link {
+      font-size: 0.83rem;
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: opacity 0.2s;
+    }
+    .project-link:hover { opacity: 0.7; }
+    .project-link.muted { color: var(--muted); }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--bg); }
+    .timeline { max-width: 780px; position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+    }
+    .timeline-item {
+      padding-left: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -5px; top: 8px;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--cyan);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+    .timeline-company { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.8rem; }
+    .timeline-desc { color: var(--muted); font-size: 0.93rem; }
+    .timeline-desc li { margin-bottom: 0.4rem; padding-left: 0.2rem; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      text-align: center;
+    }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact-inner p { color: var(--muted); margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .contact-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-chip:hover { border-color: var(--cyan); color: var(--cyan); }
+    .contact-chip svg { width: 15px; height: 15px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer img { height: 28px; }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">
+    <img src="data:image/jpeg;base64,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" alt="Monirul Islam" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:monirul@monirulislam.dev" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Available for Remote Work</div>
+    <h1>
+      Power Platform<br>
+      <span class="line2">&amp; Data Engineer.</span>
+    </h1>
+    <p class="hero-sub">
+      I build production-grade Power Apps, data pipelines, and BI dashboards that help healthcare organizations make better decisions — end to end.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-ghost">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid fade-up">
+    <div class="about-text">
+      <p class="section-label">About</p>
+      <h2>Building real things<br>for real people.</h2>
+      <div class="section-divider"></div>
+      <p>
+        I'm a remote freelance developer based in Bangladesh, specializing in <strong>Microsoft Power Platform</strong> and <strong>data engineering</strong>. For the past 2+ years I've worked with an agency on a long-term contract, delivering end-to-end solutions for a healthcare client.
+      </p>
+      <p>
+        My work spans the full lifecycle — from gathering requirements and designing data models to building apps, automating workflows, and keeping everything running smoothly after launch.
+      </p>
+      <p>
+        I'm open to remote freelance contracts and full-time roles worldwide.
+      </p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-number">2+</div>
+        <div class="stat-label">Years of production experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Active users on flagship app</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">Apps built & maintained</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Updates shipped without downtime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label fade-up">Skills</p>
+  <h2 class="fade-up">My stack.</h2>
+  <div class="section-divider fade-up"></div>
+  <div class="skills-grid">
+    <div class="skill-group fade-up">
+      <div class="skill-group-icon">⚡</div>
+      <h3>Power Platform</h3>
+      <div class="skill-tags">
+        <span class="tag">Power Apps Canvas</span>
+        <span class="tag">Power Apps Model-driven</span>
+        <span class="tag">Power BI</span>
+        <span class="tag">Azure Logic Apps</span>
+        <span class="tag">Azure Functions</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <div class="skill-group-icon">🔁</div>
+      <h3>Data Engineering</h3>
+      <div class="skill-tags">
+        <span class="tag">Snowflake</span>
+        <span class="tag">Prefect</span>
+        <span class="tag blue">Data Pipelines</span>
+        <span class="tag blue">Workflow Automation</span>
+        <span class="tag blue">ETL</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <div class="skill-group-icon">🗄️</div>
+      <h3>Databases</h3>
+      <div class="skill-tags">
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">MS SQL Server</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <div class="skill-group-icon">🛠️</div>
+      <h3>Backend & Tools</h3>
+      <div class="skill-tags">
+        <span class="tag neutral">Spring Boot</span>
+        <span class="tag neutral">ASP.NET</span>
+        <span class="tag neutral">Git</span>
+        <span class="tag neutral">Linux</span>
+        <span class="tag neutral">Azure Cloud</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label fade-up">Projects</p>
+  <h2 class="fade-up">What I've built.</h2>
+  <div class="section-divider fade-up"></div>
+  <div class="projects-grid">
+
+    <div class="project-card fade-up">
+      <span class="project-badge badge-live">Production</span>
+      <h3>Healthcare Patient Management System</h3>
+      <p>A Canvas PowerApp managing patient records and workflows for a healthcare organization. Used daily by 30+ internal staff. Delivered multiple feature and performance improvement cycles with zero downtime.</p>
+      <div class="project-stack">
+        <span class="tag">Power Apps</span>
+        <span class="tag">Azure</span>
+        <span class="tag">Power BI</span>
+      </div>
+      <div class="project-links">
+        <span class="project-link muted">🔒 Private client project</span>
+      </div>
+    </div>
+
+    <div class="project-card fade-up">
+      <span class="project-badge badge-wip">Coming Soon</span>
+      <h3>Staff Scheduling & Coverage Dashboard</h3>
+      <p>A full-stack scheduling tool built with Power Apps and Snowflake, featuring a Power BI dashboard for real-time coverage analytics. Designed to mirror real-world healthcare workforce management.</p>
+      <div class="project-stack">
+        <span class="tag">Power Apps</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">Power BI</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">→ Demo coming soon</a>
+      </div>
+    </div>
+
+    <div class="project-card fade-up">
+      <span class="project-badge badge-wip">Coming Soon</span>
+      <h3>Automated Data Pipeline (Prefect + Snowflake)</h3>
+      <p>An end-to-end data engineering pipeline using Prefect Cloud for scheduling and Snowflake for transformation and storage, surfaced through a live Power BI dashboard.</p>
+      <div class="project-stack">
+        <span class="tag">Prefect</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">Power BI</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">→ GitHub coming soon</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label fade-up">Experience</p>
+  <h2 class="fade-up">Where I've worked.</h2>
+  <div class="section-divider fade-up"></div>
+  <div class="timeline fade-up">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Aug 2023 — Present</div>
+      <div class="timeline-role">Power Platform & Data Engineer</div>
+      <div class="timeline-company">Agency Contract · Healthcare Client · Remote</div>
+      <ul class="timeline-desc">
+        <li>Built and maintain multiple Canvas & Model-driven PowerApps, including a patient management system with 30+ daily users.</li>
+        <li>Designed Snowflake data pipelines and Prefect automations for large-scale data ingestion and transformation.</li>
+        <li>Developed Power BI dashboards and Azure Logic Apps for workflow automation.</li>
+        <li>Full ownership: requirements → development → deployment → ongoing support.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Jul 2023 — Dec 2023</div>
+      <div class="timeline-role">Support Agent</div>
+      <div class="timeline-company">Holidayzer Europe GmbH · Remote</div>
+      <ul class="timeline-desc">
+        <li>Handled high-volume inbound support across phone and messaging channels.</li>
+        <li>Resolved customer complaints within defined SLAs for a European travel company.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Sep 2022 — Dec 2022</div>
+      <div class="timeline-role">Software Developer Intern</div>
+      <div class="timeline-company">Ctrends Software & Services Ltd.</div>
+      <ul class="timeline-desc">
+        <li>Developed backend features using Spring Boot (Java) in an agile team environment.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner fade-up">
+    <p class="section-label">Contact</p>
+    <h2>Let's work together.</h2>
+    <div class="section-divider" style="margin: 1rem auto 2rem;"></div>
+    <p>I'm open to remote freelance contracts and full-time roles worldwide. Whether you need a Power Platform specialist, a data engineer, or both — let's talk.</p>
+    <a href="mailto:monirul@monirulislam.dev" class="btn-primary">monirul@monirulislam.dev</a>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/monirul-dev/" class="contact-chip" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V9h3v10zM6.5 7.73C5.53 7.73 4.75 6.95 4.75 6S5.53 4.27 6.5 4.27 8.25 5.05 8.25 6 7.47 7.73 6.5 7.73zM20 19h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97V19h-3V9h2.88v1.36h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.59V19z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/monirul-dev" class="contact-chip" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="data:image/jpeg;base64,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" alt="Monirul Islam" />
+  <p>© 2026 Md. Monirul Islam · Built with care.</p>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Stagger children inside grids
+  document.querySelectorAll('.skills-grid .skill-group, .projects-grid .project-card, .about-stats .stat-card').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 80}ms`;
+  });
+</script>
+</body>
+</html>
